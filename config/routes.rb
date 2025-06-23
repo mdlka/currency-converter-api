@@ -1,3 +1,5 @@
 Rails.application.routes.draw do
-  get "up" => "rails/health#show", as: :rails_health_check
+  namespace :api do
+    get "/convert", to: "converter#convert"
+  end
 end
