@@ -1,12 +1,15 @@
 require "net/http"
 
 class ConverterService
-  def convert(from, to, amount)
-    rates = get_rates
-    from_rate = rates[from.upcase]
-    to_rate = rates[to.upcase]
+  def initialize(from:, to:, amount:)
+    @from = from.upcase
+    @to = to.upcase
+    @amount = amount.to_f
+  end
 
-    to_rate / from_rate * amount.to_f
+  def convert
+    rates = get_rates
+    rates[@to] / rates[@from] * @amount
   end
 
   private
