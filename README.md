@@ -1,4 +1,4 @@
-# Конвертер валют API
+# Currency Converter API
 
 API для конвертации валют, разработанное на Ruby on Rails.
 
