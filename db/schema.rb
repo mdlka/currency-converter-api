@@ -12,10 +12,10 @@
 
 ActiveRecord::Schema[8.0].define(version: 2025_06_26_120031) do
   create_table "conversions", force: :cascade do |t|
-    t.string "from"
-    t.string "to"
-    t.decimal "amount"
-    t.decimal "result"
+    t.string "from", null: false
+    t.string "to", null: false
+    t.decimal "amount", null: false
+    t.decimal "result", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
   end
