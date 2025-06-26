@@ -1,6 +1,8 @@
-require "net/http"
-
 class ConverterService
+  class Error < StandardError; end
+
+  COUNTRY_CODE_FORMAT = /\A[A-Z]{3}\z/.freeze
+
   def initialize(from:, to:, amount:)
     @from = from.upcase
     @to = to.upcase
@@ -8,18 +10,21 @@ class ConverterService
   end
 
   def convert
-    rates = get_rates
+    validate_currency_code!(@from)
+    validate_currency_code!(@to)
+
+    rates = ExchangeRateApiService.new.get_rates
+
+    unless rates.key?(@from) && rates.key?(@to)
+      raise Error, "Invalid currency code provided"
+    end
+
     rates[@to] / rates[@from] * @amount
   end
 
   private
 
-  def get_rates
-    api_key = Rails.application.credentials.exchangerate_api_key!
-    uri = URI("https://v6.exchangerate-api.com/v6/#{api_key}/latest/USD")
-    response_json = Net::HTTP.get(uri)
-    response = JSON.parse(response_json)
-
-    response["conversion_rates"]
+  def validate_currency_code!(code)
+    raise Error, "Invalid currency code format #{code}" unless code.match?(COUNTRY_CODE_FORMAT)
   end
 end

@@ -8,5 +8,8 @@ class Api::ConverterController < ApplicationController
     else
       render json: { errors: conversion.errors.full_messages }, status: :unprocessable_content
     end
+
+  rescue ConverterService::Error => e
+    render json: { error: e.message }, status: :unprocessable_content
   end
 end
